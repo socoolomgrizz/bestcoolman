@@ -382,7 +382,7 @@ CombatTab:AddSlider("HBES", {
     Max = 20,
     Rounding = 1,
     Callback = function(Value)
-        print("HBESV:", Value)
+        -- Value is the size ("HBESV:", Value)
     end
 })
 local Section = CombatTab:AddSection("Head changer")
