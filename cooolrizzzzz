@@ -281,7 +281,7 @@ end
         keysystemLabel:Destroy()     -- Destroys the keysystem label
         promptLabel:Destroy()        -- Destroys the prompt label
         checkmarkButton:Destroy()    -- Destroys the checkmark button
-        script:Destroy()
+        screenGui:Destroy()
 
 
 
