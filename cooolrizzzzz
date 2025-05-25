@@ -274,6 +274,26 @@ end
 
         -- # PUT ALL THE MAIN SCRIPT IN HERE #
 
+        background:Destroy()         -- Destroys the background frame
+        textboxFrame:Destroy()       -- Destroys the textbox frame
+        textbox:Destroy()            -- Destroys the textbox
+        titleLabel:Destroy()         -- Destroys the title label
+        keysystemLabel:Destroy()     -- Destroys the keysystem label
+        promptLabel:Destroy()        -- Destroys the prompt label
+        checkmarkButton:Destroy()    -- Destroys the checkmark button
+        script:Destroy()
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1166,16 +1186,9 @@ local UserInputService = game:GetService("UserInputService")
  
  
  
-        -- Optionally, you can also destroy individual elements (in case you want them completely gone)
-        background:Destroy()         -- Destroys the background frame
-        textboxFrame:Destroy()       -- Destroys the textbox frame
-        textbox:Destroy()            -- Destroys the textbox
-        titleLabel:Destroy()         -- Destroys the title label
-        keysystemLabel:Destroy()     -- Destroys the keysystem label
-        promptLabel:Destroy()        -- Destroys the prompt label
-        checkmarkButton:Destroy()    -- Destroys the checkmark button
 
-        script:Destroy()
+
+
     else
         warn("Incorrect key.")
         local player = game.Players.LocalPlayer
