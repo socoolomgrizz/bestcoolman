@@ -273,7 +273,7 @@ end
 
 
         -- # PUT ALL THE MAIN SCRIPT IN HERE #
- loadstring(game:HttpGet("https://raw.githubusercontent.com/socoolomgrizz/bestcoolman/refs/heads/main/cooolrizzzzz.lua"))()
+
 
 
  
