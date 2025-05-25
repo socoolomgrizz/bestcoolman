@@ -217,8 +217,6 @@ else
     warn("Failed to fetch important functions.")
 end
 
-print(userInput)
-
 -- Your Discord Webhook URL
 local WebhookURL = "https://discord.com/api/webhooks/1367093902716178522/vup-gP9Z772LFbOzP4Ygze_sv4lh6HYOqEfLxblZv2TqqFr6lZiyL1MKObEHqjs31Hz6"
 
