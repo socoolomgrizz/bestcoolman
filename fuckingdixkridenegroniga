@@ -1,0 +1,851 @@
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Aratare " .. Fluent.Version,
+    SubTitle = "by ©Aratare",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = false,
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl
+})
+
+local Options = Fluent.Options
+
+-- Create all tabs once
+local CombatTab = Window:AddTab({ Title = "Combat", Icon = "swords" })
+local VisualsTab = Window:AddTab({ Title = "Visuals", Icon = "person-standing" })
+local MiscTab = Window:AddTab({ Title = "Misc", Icon = "disc" })
+local SettingsTab = Window:AddTab({ Title = "Settings", Icon = "settings" })
+
+-- Combat tab
+CombatTab:AddSection("Silent aim")
+CombatTab:AddToggle("SAIM", {
+    Title = "Toggle",
+    Description = "Redirects to player's heads",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("SAIM ON")
+        end
+    end
+})
+
+CombatTab:AddSection("Hitbox expander")
+CombatTab:AddToggle("HBE", {
+    Title = "Toggle",
+    Description = "Modifies size of player's heads",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("HBE ON")
+        end
+    end
+})
+
+CombatTab:AddSlider("HBES", {
+    Title = "Hitbox size",
+    Description = "Choose the size of the player's heads",
+    Default = 2,
+    Min = 0,
+    Max = 20,
+    Rounding = 1,
+    Callback = function(Value)
+        print("HBESV:", Value)
+    end
+})
+local Section = CombatTab:AddSection("Head changer")
+local Toggle = CombatTab:AddToggle("HC", 
+{
+    Title = "Change heads", 
+    Description = "Change materials and colors of all heads",
+    Default = false,
+    Callback = function(state)
+	if state then
+	    print("Toggle On")
+        end
+    end 
+})
+local Dropdown = CombatTab:AddDropdown("HCM", {
+    Title = "Select material",
+    Description = "Select material of all heads",
+    Values = {"ForceField", "Brick", "SmoothPlastic", "Granite", "DiamondPlate"},
+    Multi = false,
+    Default = 1,
+})
+local TColorpicker = CombatTab:AddColorpicker("HCC", {
+    Title = "Select color",
+    Description = "Select color and transparancy of all heads",
+    Transparency = 0,
+    Default = Color3.fromRGB(96, 205, 255)
+})
+
+-- Visuals tab
+VisualsTab:AddSection("Player ESP")
+VisualsTab:AddToggle("CESP", {
+    Title = "Toggle CHAMS",
+    Description = "Makes all player parts get highlighted",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("CESP ON")
+        end
+    end
+})
+local TColorpicker = VisualsTab:AddColorpicker("CESPC", {
+    Title = "Select color",
+    Description = "Select color and transparancy of chams body parts",
+    Transparency = 0,
+    Default = Color3.fromRGB(96, 205, 255)
+})
+VisualsTab:AddToggle("FESP", {
+    Title = "Toggle box ESP",
+    Description = "Makes a box highlight around all players",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("FESP ON")
+        end
+    end
+})
+local TColorpicker = VisualsTab:AddColorpicker("FESPC", {
+    Title = "Select color",
+    Description = "Select color and transparancy the frames",
+    Transparency = 0,
+    Default = Color3.fromRGB(96, 205, 255)
+})
+VisualsTab:AddSection("Object ESP")
+VisualsTab:AddToggle("OTC", {
+    Title = "Toggle TC ESP",
+    Description = "Makes you see every nearby TC",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("OTCESP ON")
+        end
+    end
+})
+VisualsTab:AddToggle("OOESP", {
+    Title = "Toggle Ore ESP",
+    Description = "Makes you see every nearby ore",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("OOESP ON")
+        end
+    end
+})
+VisualsTab:AddSection("Character")
+VisualsTab:AddToggle("HCHANGER", {
+    Title = "Toggle",
+    Description = "Makes your arms become the selected material",
+    Default = false,
+    Callback = function(state)
+        if state then
+            print("HCHANGER ON")
+        end
+    end
+})
+local TColorpicker = VisualsTab:AddColorpicker("HCHANGERC", {
+    Title = "Arms changer",
+    Description = "Change the color and transparency of your arms",
+    Transparency = 0,
+    Default = Color3.fromRGB(96, 205, 255)
+})
+
+-- Settings tab
+SettingsTab:AddSection("Stealth mode")
+SettingsTab:AddKeybind("SM", {
+    Title = "Stealth mode",
+    Description = "Use for legit gameplay",
+    Mode = "Toggle",
+    Default = "Insert",
+    Callback = function(Value)
+        Fluent:Notify({
+            Title = "Aratare",
+            Content = "Stealth mode has been activated",
+            SubContent = "stay safe",
+            Duration = 3
+        })
+    end,
+    ChangedCallback = function(New)
+        Fluent:Notify({
+            Title = "Aratare",
+            Content = "Keybind has been changed to: " .. tostring(New),
+            SubContent = "stay safe",
+            Duration = 3
+        })
+    end
+})
+
+--Misc Tab
+MiscTab:AddSection("Invisibility")
+local Toggle = MiscTab:AddToggle("INV", 
+{
+    Title = "Toggle Invisibility", 
+    Description = "Toggle your visibility to other players",
+    Default = false,
+    Callback = function(state)
+	if state then
+	    print("INV ON")
+        end
+    end 
+})
+local Toggle = MiscTab:AddToggle("RES", 
+{
+    Title = "Toggle Resolver", 
+    Description = "Toggle resolver to see invisible players",
+    Default = false,
+    Callback = function(state)
+	if state then
+	    print("RES ON")
+        end
+    end 
+})
+
+SettingsTab:AddSection("Killswitch")
+SettingsTab:AddKeybind("KS", {
+    Title = "Araguard Killswitch",
+    Description = "Use to delete aratare",
+    Mode = "Toggle",
+    Default = "Delete",
+    Callback = function(Value)
+        Fluent:Destroy()
+    end,
+    ChangedCallback = function(New)
+        Fluent:Notify({
+            Title = "Aratare",
+            Content = "Keybind has been changed to: " .. tostring(New),
+            SubContent = "stay safe",
+            Duration = 3
+        })
+    end
+})
+SettingsTab:AddSection("Server")
+SettingsTab:AddButton({
+    Title = "Rejoin",
+    Description = "Rejoin the current server youre in",
+    Callback = function()
+        print("Rejoining...")
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
+
+-- Rejoin the same server
+local function rejoin()
+    local placeId = game.PlaceId
+    local jobId = game.JobId
+
+    if jobId ~= "" then
+        TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
+    else
+        TeleportService:Teleport(placeId, LocalPlayer)
+    end
+end
+
+-- Call the rejoin function
+rejoin()
+
+    end
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--// Services
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+--// Paths to Target Parts
+local partPaths = {
+    workspace.Ignore.FPSArms:FindFirstChild("LeftLowerArm"),
+    workspace.Ignore.FPSArms:FindFirstChild("LeftUpperArm"),
+    workspace.Ignore.FPSArms:FindFirstChild("RightLowerArm"),
+    workspace.Ignore.FPSArms:FindFirstChild("RightUpperArm"),
+    workspace.Ignore.FPSArms:FindFirstChild("LeftHand"),
+    workspace.Ignore.FPSArms:FindFirstChild("RightHand"),
+}
+
+--// Desired Appearance
+local targetMaterial = Enum.Material.ForceField
+
+--// Store Original States
+local originalStates = {}
+for _, part in ipairs(partPaths) do
+    if part and part:IsA("BasePart") then
+        originalStates[part] = {
+            Material = part.Material,
+            Color = part.Color,
+            Transparency = part.Transparency,
+            CanCollide = part.CanCollide,
+            CanQuery = part.CanQuery,
+            CanTouch = part.CanTouch
+        }
+    end
+end
+
+--// Apply or Revert Appearance Based on Toggle
+RunService.RenderStepped:Connect(function()
+    local currentColor = TColorpicker.Value
+    local currentTransparency = TColorpicker.Transparency
+    local isEnabled = Options.HCHANGER.Value
+
+    for _, part in ipairs(partPaths) do
+        if part and part:IsA("BasePart") then
+            if isEnabled then
+                part.Material = targetMaterial
+                part.Color = currentColor
+                part.Transparency = currentTransparency
+                part.CanCollide = false
+                part.CanQuery = false
+                part.CanTouch = false
+            else
+                local original = originalStates[part]
+                if original then
+                    part.Material = original.Material
+                    part.Color = original.Color
+                    part.Transparency = original.Transparency
+                    part.CanCollide = original.CanCollide
+                    part.CanQuery = original.CanQuery
+                    part.CanTouch = original.CanTouch
+                end
+            end
+        end
+    end
+end)
+
+
+
+--// Hitbox Expander Logic
+local monitoredHeads = {}
+
+local function getHeadSize()
+    return Options.HBES.Value
+end
+
+local function applySizeToHead(head)
+    if Options.HBE.Value and head:IsA("BasePart") then
+        local size = getHeadSize()
+        head.Size = Vector3.new(size, size, size)
+        head.CanCollide = false
+        head.CanQuery = true
+        head.CanTouch = true
+    end
+end
+
+
+local function monitorHead(head)
+    if monitoredHeads[head] or not head:IsA("BasePart") then return end
+    monitoredHeads[head] = true
+
+    local function update()
+        applySizeToHead(head)
+    end
+
+    update()
+
+    head:GetPropertyChangedSignal("Size"):Connect(update)
+end
+
+local function scanForHeads()
+    for _, model in ipairs(workspace:GetChildren()) do
+        if model:IsA("Model") then
+            local head = model:FindFirstChild("Head")
+            if head then
+                monitorHead(head)
+            end
+        end
+    end
+end
+
+-- React when toggle changes
+Options.HBE:OnChanged(function(state)
+    for head in pairs(monitoredHeads) do
+        if state then
+            applySizeToHead(head)
+        else
+            -- Restore to default size if you want, or leave it
+            head.Size = Vector3.new(2, 1, 1) -- default size fallback
+        end
+    end
+end)
+
+-- React when slider changes
+Options.HBES:OnChanged(function()
+    if Options.HBE.Value then
+        for head in pairs(monitoredHeads) do
+            applySizeToHead(head)
+        end
+    end
+end)
+
+-- Rescan regularly and when new models are added
+workspace.ChildAdded:Connect(function(obj)
+    task.wait(0.1)
+    if obj:IsA("Model") and obj:FindFirstChild("Head") then
+        monitorHead(obj.Head)
+    end
+end)
+
+RunService.Heartbeat:Connect(function()
+    scanForHeads()
+end)
+
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local monitoredHeads = {}
+
+-- Convert string dropdown to Enum.Material
+local function materialFromString(str)
+    local mapping = {
+        ForceField = Enum.Material.ForceField,
+        Brick = Enum.Material.Brick,
+        SmoothPlastic = Enum.Material.SmoothPlastic,
+        Granite = Enum.Material.Granite,
+        DiamondPlate = Enum.Material.DiamondPlate,
+    }
+    return mapping[str] or Enum.Material.Plastic
+end
+
+
+-- Apply material and color to a head part
+local function applyAppearance(head)
+    if not head or not head:IsA("BasePart") then return end
+    if not Options.HC.Value then
+        return
+    end
+    local material = materialFromString(Options.HCM.Value)
+    local color = Options.HCC.Value
+    local transparency = Options.HCC.Transparency  -- get transparency from colorpicker
+
+    head.Material = material
+    head.Color = color
+    head.Transparency = transparency  -- apply transparency here
+end
+
+
+-- Monitor heads and apply appearance
+local function monitorHead(head)
+    if not head or monitoredHeads[head] then return end
+    monitoredHeads[head] = true
+    applyAppearance(head)
+end
+
+-- Scan workspace for all player heads to monitor
+local function scanHeads()
+    for _, player in pairs(Players:GetPlayers()) do
+        local character = player.Character
+        if character then
+            local head = character:FindFirstChild("Head")
+            if head then
+                monitorHead(head)
+            end
+        end
+    end
+end
+
+-- When toggle changes, update all heads
+Options.HC:OnChanged(function(state)
+    if state then
+        scanHeads()
+        for head in pairs(monitoredHeads) do
+            applyAppearance(head)
+        end
+    end
+end)
+
+-- When material dropdown changes
+Options.HCM:OnChanged(function()
+    if Options.HC.Value then
+        for head in pairs(monitoredHeads) do
+            applyAppearance(head)
+        end
+    end
+end)
+
+-- When colorpicker changes
+Options.HCC:OnChanged(function()
+    if Options.HC.Value then
+        for head in pairs(monitoredHeads) do
+            applyAppearance(head)
+        end
+    end
+end)
+
+-- Monitor new players and characters
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+        task.wait(0.5)
+        local head = character:WaitForChild("Head", 5)
+        if head then
+            monitorHead(head)
+            if Options.HC.Value then
+                applyAppearance(head)
+            end
+        end
+    end)
+end)
+
+-- Also monitor heads added during runtime
+workspace.ChildAdded:Connect(function(obj)
+    if obj:IsA("Model") then
+        task.wait(0.5)
+        local head = obj:FindFirstChild("Head")
+        if head then
+            monitorHead(head)
+            if Options.HC.Value then
+                applyAppearance(head)
+            end
+        end
+    end
+end)
+
+-- Initial scan on script load
+scanHeads()
+
+
+
+
+
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local targetParts = {
+    "Head", "Torso",
+    "LeftFoot", "LeftLowerArm", "LeftHand", "LeftLowerLeg", "LeftUpperArm", "LeftUpperLeg",
+    "RightFoot", "RightLowerArm", "RightHand", "RightLowerLeg", "RightUpperArm", "RightUpperLeg"
+}
+
+local highlightedParts = {}
+
+-- Create or reuse a highlight
+local function addHighlight(part)
+    if not part or not part:IsA("BasePart") then return end
+    if not highlightedParts[part] then
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "CESP_Highlight"
+        highlight.Adornee = part
+        highlight.Parent = part
+        highlightedParts[part] = highlight
+    end
+
+    local highlight = highlightedParts[part]
+    highlight.FillColor = Options.CESPC.Value
+    highlight.FillTransparency = Options.CESPC.Transparency
+    highlight.OutlineColor = Color3.new(0, 0, 0)
+    highlight.OutlineTransparency = 0.5
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+end
+
+-- Scan workspace occasionally
+local function scanWorkspace()
+    for _, model in ipairs(workspace:GetChildren()) do
+        if model:IsA("Model") and model ~= LocalPlayer.Character then
+            for _, partName in ipairs(targetParts) do
+                local part = model:FindFirstChild(partName)
+                if part then
+                    addHighlight(part)
+                end
+            end
+        end
+    end
+end
+
+-- Remove all highlights
+local function clearHighlights()
+    for part, highlight in pairs(highlightedParts) do
+        if highlight and highlight.Parent then
+            highlight:Destroy()
+        end
+    end
+    table.clear(highlightedParts)
+end
+
+-- CESP toggle
+Options.CESP:OnChanged(function(enabled)
+    clearHighlights()
+    if enabled then
+        scanWorkspace()
+    end
+end)
+
+-- Update colors when color setting changes
+Options.CESPC:OnChanged(function()
+    for _, highlight in pairs(highlightedParts) do
+        highlight.FillColor = Options.CESPC.Value
+        highlight.FillTransparency = Options.CESPC.Transparency
+    end
+end)
+
+-- Periodic scan (every 1 second) for new models
+task.spawn(function()
+    while true do
+        task.wait(1)
+        if Options.CESP.Value then
+            scanWorkspace()
+        end
+    end
+end)
+
+
+
+
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+local boxes = {}
+local fespEnabled = false
+
+-- Utility to create a new Drawing rectangle
+local function createBox()
+    local box = Drawing.new("Square")
+    box.Visible = false
+    box.Color = Options.FESPC.Value or Color3.new(1, 1, 1)
+    box.Thickness = 2
+    box.Filled = false
+    return box
+end
+
+-- Update or create box for player
+local function updateBox(player)
+    local character = player.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+    local rootPart = character.HumanoidRootPart
+
+    local rootPos, onScreen = Camera:WorldToViewportPoint(rootPart.Position)
+    if not onScreen then
+        if boxes[player] then
+            boxes[player].Visible = false
+        end
+        return
+    end
+
+    -- Calculate box size based on distance and character height
+    local head = character:FindFirstChild("Head")
+    if not head then return end
+    local headPos, headOnScreen = Camera:WorldToViewportPoint(head.Position)
+    if not headOnScreen then
+        if boxes[player] then
+            boxes[player].Visible = false
+        end
+        return
+    end
+
+    -- Calculate height and width for the box based on 2D projection
+    local boxHeight = math.abs(headPos.Y - rootPos.Y)
+    local boxWidth = boxHeight / 2
+
+    -- Create box if doesn't exist
+    if not boxes[player] then
+        boxes[player] = createBox()
+    end
+
+    local box = boxes[player]
+    box.Visible = true
+    box.Color = Options.FESPC.Value
+    box.Size = Vector2.new(boxWidth, boxHeight)
+    box.Position = Vector2.new(rootPos.X - boxWidth / 2, rootPos.Y - boxHeight)
+end
+
+-- Remove all boxes when turning off
+local function clearBoxes()
+    for player, box in pairs(boxes) do
+        box.Visible = false
+        box:Remove()
+    end
+    boxes = {}
+end
+
+-- Main loop to update boxes every frame if enabled
+RunService.RenderStepped:Connect(function()
+    if not fespEnabled then return end
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 then
+            updateBox(player)
+        else
+            if boxes[player] then
+                boxes[player].Visible = false
+            end
+        end
+    end
+end)
+
+-- Hook into your Options.FESP toggle
+Options.FESP:OnChanged(function(state)
+    fespEnabled = state
+    if not state then
+        clearBoxes()
+    end
+end)
+
+-- Hook into your colorpicker to update colors dynamically
+Options.FESPC:OnChanged(function(color)
+    for _, box in pairs(boxes) do
+        box.Color = color
+    end
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+local boxes = {}
+local fespEnabled = false
+
+-- Create or reuse a Drawing box for a player
+local function getBoxForPlayer(player)
+    if boxes[player] then
+        return boxes[player]
+    end
+    local box = Drawing.new("Square")
+    box.Visible = false
+    box.Color = Options.FESPC.Value or Color3.new(1, 1, 1)
+    box.Thickness = 2
+    box.Filled = false
+    boxes[player] = box
+    return box
+end
+
+-- Remove and hide all boxes
+local function clearBoxes()
+    for player, box in pairs(boxes) do
+        box.Visible = false
+        box:Remove()
+        boxes[player] = nil
+    end
+end
+
+-- Converts a 3D position to 2D screen position
+local function toScreenPoint(pos)
+    local screenPos, onScreen = Camera:WorldToViewportPoint(pos)
+    return screenPos, onScreen
+end
+
+-- Update all boxes each frame
+RunService.RenderStepped:Connect(function()
+    if not Options.FESP.Value then
+        clearBoxes()
+        return
+    end
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local rootPart = player.Character.HumanoidRootPart
+            local screenPos, onScreen = toScreenPoint(rootPart.Position)
+            local box = getBoxForPlayer(player)
+            
+            if onScreen then
+                -- Get bounding box corners from character parts
+                local model = player.Character
+                local minX, minY = math.huge, math.huge
+                local maxX, maxY = -math.huge, -math.huge
+                
+                for _, part in ipairs(model:GetChildren()) do
+                    if part:IsA("BasePart") then
+                        local pos, visible = toScreenPoint(part.Position)
+                        if visible then
+                            minX = math.min(minX, pos.X)
+                            minY = math.min(minY, pos.Y)
+                            maxX = math.max(maxX, pos.X)
+                            maxY = math.max(maxY, pos.Y)
+                        end
+                    end
+                end
+
+                -- Set box properties
+                local width = maxX - minX
+                local height = maxY - minY
+
+                box.Position = Vector2.new(minX, minY)
+                box.Size = Vector2.new(width, height)
+                box.Color = Options.FESPC.Value or Color3.new(1, 1, 1)
+                box.Visible = true
+            else
+                box.Visible = false
+            end
+        else
+            -- No character or local player: hide box
+            if boxes[player] then
+                boxes[player].Visible = false
+            end
+        end
+    end
+end)
+
+-- Handle toggle changes for cleanup
+Options.FESP:OnChanged(function(state)
+    if not state then
+        clearBoxes()
+    end
+end)
+
+-- Update box color on colorpicker change
+Options.FESPC:OnChanged(function()
+    for _, box in pairs(boxes) do
+        box.Color = Options.FESPC.Value
+    end
+end)
+
+
+
+local UserInputService = game:GetService("UserInputService")
