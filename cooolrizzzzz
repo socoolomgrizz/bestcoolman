@@ -105,7 +105,7 @@ local validKeys = {}
 
 
 validKeys["DEV_KEYs8gmvfese8vfnge986nsevfjniksdfji8oesvfbiunesfsef"] = true --dev key
-validKeys["DEV_KEYxvf-79m,hgsem9f,vse967fngesv87mse87bm fcse86fens"] = true --dev key
+validKeys["DEV_KEYxvf-79m,hgsem9f,vse967fngesv87mse87bmawddadtfens"] = true --dev key
 validKeys["DEV_KEYjakie-iuhfiiisefvs8e9z68ntsn63tmsvefmbsefnmjomos"] = true --dev key
 validKeys["DEV_KEYhello-sfeubmvsembfsevmfuh86gmiv3v3srs3vrun6ftsen"] = true --dev key
 validKeys["78ngesvf7tjbksefimsehfvsijkbhdmfvsnkjebfvsetu7nvfmseobi"] = true --change on ...
