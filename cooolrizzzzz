@@ -183,7 +183,6 @@ local function captureLogs()
         local args = {...}
         local logMessage = table.concat(args, " ")
         sendToDiscord(logMessage)  -- Send the log message to Discord
-        oldPrint(unpack(args))  -- Also print to the F9 console
     end
 end
 
