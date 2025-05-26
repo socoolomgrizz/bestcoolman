@@ -571,7 +571,7 @@ SettingsTab:AddButton({
     Title = "Rejoin",
     Description = "Rejoin the current server youre in",
     Callback = function()
-        print("Rejoining...")
+        
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 
