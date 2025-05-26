@@ -1,4 +1,3 @@
--- Define ScreenGuii
 local player = game:GetService("Players").LocalPlayer
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "MyDraggableGui"
