@@ -144,6 +144,20 @@ checkmarkButton.MouseButton1Click:Connect(function()
     if validKeys[userInput] then  -- Check if userInput is a valid key
         print("Correct key! Access granted.")
 
+local DevKeys = {}
+
+DevKeys["DEV_KEYs8gmvfese8vfnge986nsevfjniksdfji8oesvfbiunesfsef"] = true --dev key
+DevKeys["DEV_KEYxvf-79m,hgsem9f,vse967fngesv87mse87bmawddadtfens"] = true --dev key
+DevKeys["DEV_KEYjakie-iuhfiiisefvs8e9z68ntsn63tmsvefmbsefnmjomos"] = true --dev key
+DevKeys["DEV_KEYhello-sfeubmvsembfsevmfuh86gmiv3v3srs3vrun6ftsen"] = true --dev key
+
+checkmarkButton.MouseButton1Click:Connect(function()
+    local userInput = textbox.Text
+    if validKeys[userInput] then  -- Check if userInput is a valid key
+        print("Loading DEV build...")
+
+
+
         local HttpService = game:GetService("HttpService")
 
  local userInput = textbox.Text
