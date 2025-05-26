@@ -1203,7 +1203,7 @@ local UserInputService = game:GetService("UserInputService")
     else
         warn("Incorrect key.")
         local player = game.Players.LocalPlayer
-        player:Kick("no key no access (fucking nigger)")
+        player:Kick("Araguard: no key no access (fucking nigger)")
     end
 end)
  
