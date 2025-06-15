@@ -299,14 +299,14 @@ end
 
 local function getAllTargetParts(model)
     local parts = {}
-    for _, partName in ipairs(targetParts) do
-        local part = model:FindFirstChild(partName, true)
-        if part and part:IsA("BasePart") then
-            table.insert(parts, part)
+    for _, descendant in ipairs(model:GetDescendants()) do
+        if descendant:IsA("BasePart") and table.find(targetParts, descendant.Name) then
+            table.insert(parts, descendant)
         end
     end
     return parts
 end
+
 
 local function scanCESP()
     for _, model in ipairs(workspace:GetChildren()) do
