@@ -274,67 +274,85 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 
---// Paths to Target Parts
-local partPaths = {
-    workspace.Ignore.FPSArms:FindFirstChild("LeftLowerArm"),
-    workspace.Ignore.FPSArms:FindFirstChild("LeftUpperArm"),
-    workspace.Ignore.FPSArms:FindFirstChild("RightLowerArm"),
-    workspace.Ignore.FPSArms:FindFirstChild("RightUpperArm"),
-    workspace.Ignore.FPSArms:FindFirstChild("LeftHand"),
-    workspace.Ignore.FPSArms:FindFirstChild("RightHand"),
+--// === CESP ===
+local highlightedParts = {}
+local targetParts = {
+    "Head", "Torso",
+    "LeftFoot", "LeftLowerArm", "LeftHand", "LeftLowerLeg", "LeftUpperArm", "LeftUpperLeg",
+    "RightFoot", "RightLowerArm", "RightHand", "RightLowerLeg", "RightUpperArm", "RightUpperLeg"
 }
 
---// Desired Appearance
-local targetMaterial = Enum.Material.ForceField
+local function addHighlight(part)
+    if not part or not part:IsA("BasePart") or highlightedParts[part] then return end
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "CESP_Highlight"
+    highlight.Adornee = part
+    highlight.Parent = workspace
+    highlightedParts[part] = highlight
 
---// Store Original States
-local originalStates = {}
-for _, part in ipairs(partPaths) do
-    if part and part:IsA("BasePart") then
-        originalStates[part] = {
-            Material = part.Material,
-            Color = part.Color,
-            Transparency = part.Transparency,
-            CanCollide = part.CanCollide,
-            CanQuery = part.CanQuery,
-            CanTouch = part.CanTouch
-        }
+    highlight.FillColor = Options.CESPC.Value
+    highlight.FillTransparency = Options.CESPC.Transparency
+    highlight.OutlineColor = Color3.new(0, 0, 0)
+    highlight.OutlineTransparency = 0.5
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+end
+
+local function getAllTargetParts(model)
+    local parts = {}
+    for _, partName in ipairs(targetParts) do
+        local part = model:FindFirstChild(partName, true)
+        if part and part:IsA("BasePart") then
+            table.insert(parts, part)
+        end
+    end
+    return parts
+end
+
+local function scanCESP()
+    for _, model in ipairs(workspace:GetChildren()) do
+        if model:IsA("Model") and model ~= LocalPlayer.Character then
+            local parts = getAllTargetParts(model)
+            for _, part in ipairs(parts) do
+                addHighlight(part)
+            end
+        end
     end
 end
 
---// Apply or Revert Appearance Based on Toggle
-RunService.RenderStepped:Connect(function()
-    local currentColor = TColorpicker.Value
-    local currentTransparency = TColorpicker.Transparency
-    local isEnabled = Options.HCHANGER.Value
+local function clearHighlights()
+    for _, highlight in pairs(highlightedParts) do
+        if highlight then
+            highlight:Destroy()
+        end
+    end
+    table.clear(highlightedParts)
+end
 
-    for _, part in ipairs(partPaths) do
-        if part and part:IsA("BasePart") then
-            if isEnabled then
-                part.Material = targetMaterial
-                part.Color = currentColor
-                part.Transparency = currentTransparency
-                part.CanCollide = false
-                part.CanQuery = false
-                part.CanTouch = false
-            else
-                local original = originalStates[part]
-                if original then
-                    part.Material = original.Material
-                    part.Color = original.Color
-                    part.Transparency = original.Transparency
-                    part.CanCollide = original.CanCollide
-                    part.CanQuery = original.CanQuery
-                    part.CanTouch = original.CanTouch
-                end
-            end
+Options.CESP:OnChanged(function(state)
+    clearHighlights()
+    if state then
+        scanCESP()
+    end
+end)
+
+Options.CESPC:OnChanged(function()
+    for _, highlight in pairs(highlightedParts) do
+        highlight.FillColor = Options.CESPC.Value
+        highlight.FillTransparency = Options.CESPC.Transparency
+    end
+end)
+
+task.spawn(function()
+    while true do
+        task.wait(5) -- CESP refresh rate
+        if Options.CESP.Value then
+            clearHighlights()
+            scanCESP()
         end
     end
 end)
 
-
-
---// Hitbox Expander Logic
+--// === Hitbox Expander ===
 local monitoredHeads = {}
 
 local function getHeadSize()
@@ -351,24 +369,21 @@ local function applySizeToHead(head)
     end
 end
 
-
 local function monitorHead(head)
-    if monitoredHeads[head] or not head:IsA("BasePart") then return end
+    if not head or monitoredHeads[head] then return end
     monitoredHeads[head] = true
-
-    local function update()
-        applySizeToHead(head)
-    end
-
-    update()
-
-    head:GetPropertyChangedSignal("Size"):Connect(update)
+    applySizeToHead(head)
+    head:GetPropertyChangedSignal("Size"):Connect(function()
+        if Options.HBE.Value then
+            applySizeToHead(head)
+        end
+    end)
 end
 
 local function scanForHeads()
     for _, model in ipairs(workspace:GetChildren()) do
         if model:IsA("Model") then
-            local head = model:FindFirstChild("Head")
+            local head = model:FindFirstChild("Head", true)
             if head then
                 monitorHead(head)
             end
@@ -376,19 +391,16 @@ local function scanForHeads()
     end
 end
 
--- React when toggle changes
 Options.HBE:OnChanged(function(state)
     for head in pairs(monitoredHeads) do
         if state then
             applySizeToHead(head)
         else
-            -- Restore to default size if you want, or leave it
-            head.Size = Vector3.new(2, 1, 1) -- default size fallback
+            head.Size = Vector3.new(2, 1, 1)
         end
     end
 end)
 
--- React when slider changes
 Options.HBES:OnChanged(function()
     if Options.HBE.Value then
         for head in pairs(monitoredHeads) do
@@ -397,214 +409,38 @@ Options.HBES:OnChanged(function()
     end
 end)
 
--- Rescan regularly and when new models are added
 workspace.ChildAdded:Connect(function(obj)
     task.wait(0.1)
-    if obj:IsA("Model") and obj:FindFirstChild("Head") then
-        monitorHead(obj.Head)
+    local head = obj:FindFirstChild("Head", true)
+    if head then
+        monitorHead(head)
     end
 end)
 
-RunService.Heartbeat:Connect(function()
-    scanForHeads()
-end)
+RunService.Heartbeat:Connect(scanForHeads)
 
+--// === HCHANGER (original behavior) ===
+RunService.RenderStepped:Connect(function()
+    if not Options.HCHANGER.Value then return end
 
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
+    local color = TColorpicker.Value
+    local transparency = TColorpicker.Transparency
 
-local monitoredHeads = {}
-
--- Convert string dropdown to Enum.Material
-local function materialFromString(str)
-    local mapping = {
-        ForceField = Enum.Material.ForceField,
-        Brick = Enum.Material.Brick,
-        SmoothPlastic = Enum.Material.SmoothPlastic,
-        Granite = Enum.Material.Granite,
-        DiamondPlate = Enum.Material.DiamondPlate,
+    local parts = {
+        "LeftLowerArm", "LeftUpperArm",
+        "RightLowerArm", "RightUpperArm",
+        "LeftHand", "RightHand",
     }
-    return mapping[str] or Enum.Material.Plastic
-end
 
-
--- Apply material and color to a head part
-local function applyAppearance(head)
-    if not head or not head:IsA("BasePart") then return end
-    if not Options.HC.Value then
-        return
-    end
-    local material = materialFromString(Options.HCM.Value)
-    local color = Options.HCC.Value
-    local transparency = Options.HCC.Transparency  -- get transparency from colorpicker
-
-    head.Material = material
-    head.Color = color
-    head.Transparency = transparency  -- apply transparency here
-end
-
-
--- Monitor heads and apply appearance
-local function monitorHead(head)
-    if not head or monitoredHeads[head] then return end
-    monitoredHeads[head] = true
-    applyAppearance(head)
-end
-
--- Scan workspace for all player heads to monitor
-local function scanHeads()
-    for _, player in pairs(Players:GetPlayers()) do
-        local character = player.Character
-        if character then
-            local head = character:FindFirstChild("Head")
-            if head then
-                monitorHead(head)
-            end
-        end
-    end
-end
-
--- When toggle changes, update all heads
-Options.HC:OnChanged(function(state)
-    if state then
-        scanHeads()
-        for head in pairs(monitoredHeads) do
-            applyAppearance(head)
-        end
-    end
-end)
-
--- When material dropdown changes
-Options.HCM:OnChanged(function()
-    if Options.HC.Value then
-        for head in pairs(monitoredHeads) do
-            applyAppearance(head)
-        end
-    end
-end)
-
--- When colorpicker changes
-Options.HCC:OnChanged(function()
-    if Options.HC.Value then
-        for head in pairs(monitoredHeads) do
-            applyAppearance(head)
-        end
-    end
-end)
-
--- Monitor new players and characters
-Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function(character)
-        task.wait(0.5)
-        local head = character:WaitForChild("Head", 5)
-        if head then
-            monitorHead(head)
-            if Options.HC.Value then
-                applyAppearance(head)
-            end
-        end
-    end)
-end)
-
--- Also monitor heads added during runtime
-workspace.ChildAdded:Connect(function(obj)
-    if obj:IsA("Model") then
-        task.wait(0.5)
-        local head = obj:FindFirstChild("Head")
-        if head then
-            monitorHead(head)
-            if Options.HC.Value then
-                applyAppearance(head)
-            end
-        end
-    end
-end)
-
--- Initial scan on script load
-scanHeads()
-
-
-
-
-
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local RunService = game:GetService("RunService")
-
-local targetParts = {
-    "Head", "Torso",
-    "LeftFoot", "LeftLowerArm", "LeftHand", "LeftLowerLeg", "LeftUpperArm", "LeftUpperLeg",
-    "RightFoot", "RightLowerArm", "RightHand", "RightLowerLeg", "RightUpperArm", "RightUpperLeg"
-}
-
-local highlightedParts = {}
-
--- Create or reuse a highlight
-local function addHighlight(part)
-    if not part or not part:IsA("BasePart") then return end
-    if not highlightedParts[part] then
-        local highlight = Instance.new("Highlight")
-        highlight.Name = "CESP_Highlight"
-        highlight.Adornee = part
-        highlight.Parent = part
-        highlightedParts[part] = highlight
-    end
-
-    local highlight = highlightedParts[part]
-    highlight.FillColor = Options.CESPC.Value
-    highlight.FillTransparency = Options.CESPC.Transparency
-    highlight.OutlineColor = Color3.new(0, 0, 0)
-    highlight.OutlineTransparency = 0.5
-    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-end
-
--- Scan workspace occasionally
-local function scanWorkspace()
-    for _, model in ipairs(workspace:GetChildren()) do
-        if model:IsA("Model") and model ~= LocalPlayer.Character then
-            for _, partName in ipairs(targetParts) do
-                local part = model:FindFirstChild(partName)
-                if part then
-                    addHighlight(part)
-                end
-            end
-        end
-    end
-end
-
--- Remove all highlights
-local function clearHighlights()
-    for part, highlight in pairs(highlightedParts) do
-        if highlight and highlight.Parent then
-            highlight:Destroy()
-        end
-    end
-    table.clear(highlightedParts)
-end
-
--- CESP toggle
-Options.CESP:OnChanged(function(enabled)
-    clearHighlights()
-    if enabled then
-        scanWorkspace()
-    end
-end)
-
--- Update colors when color setting changes
-Options.CESPC:OnChanged(function()
-    for _, highlight in pairs(highlightedParts) do
-        highlight.FillColor = Options.CESPC.Value
-        highlight.FillTransparency = Options.CESPC.Transparency
-    end
-end)
-
--- Periodic scan (every 1 second) for new models
-task.spawn(function()
-    while true do
-        task.wait(1)
-        if Options.CESP.Value then
-            scanWorkspace()
+    for _, name in ipairs(parts) do
+        local part = workspace.Ignore:FindFirstChild("FPSArms"):FindFirstChild(name)
+        if part then
+            part.Material = Enum.Material.ForceField
+            part.Color = color
+            part.Transparency = transparency
+            part.CanCollide = false
+            part.CanQuery = false
+            part.CanTouch = false
         end
     end
 end)
