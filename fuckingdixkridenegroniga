@@ -277,30 +277,24 @@ local LocalPlayer = Players.LocalPlayer
 --// === CESP ===
 local highlightedParts = {}
 local function isTargetPart(part)
-    local keywords = {
-        "Head", "Torso", "Foot", "Hand",
-        "LowerArm", "UpperArm", "LowerLeg", "UpperLeg"
-    }
-
-    for _, keyword in ipairs(keywords) do
-        if part.Name:lower():find(keyword:lower()) then
-            return true
-        end
-    end
-    return false
-end
+local targetParts = {
+    "Head", "Torso",
+    "LeftFoot", "LeftLowerArm", "LeftHand", "LeftLowerLeg", "LeftUpperArm", "LeftUpperLeg",
+    "RightFoot", "RightLowerArm", "RightHand", "RightLowerLeg", "RightUpperArm", "RightUpperLeg"
+}
 
 local function scanCESP()
     for _, model in ipairs(workspace:GetChildren()) do
         if model:IsA("Model") and model ~= LocalPlayer.Character then
             for _, part in ipairs(model:GetDescendants()) do
-                if part:IsA("BasePart") and isTargetPart(part) then
+                if part:IsA("BasePart") and table.find(targetParts, part.Name) then
                     addHighlight(part)
                 end
             end
         end
     end
 end
+
 
 local function clearHighlights()
     for _, highlight in pairs(highlightedParts) do
