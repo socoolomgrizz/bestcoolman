@@ -282,19 +282,46 @@ end
 
 
 
---// Services
+-- Services
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 
---// === CESP ===
-local highlightedParts = {}
-local function isTargetPart(part)
+-- Target parts list
 local targetParts = {
     "Head", "Torso",
     "LeftFoot", "LeftLowerArm", "LeftHand", "LeftLowerLeg", "LeftUpperArm", "LeftUpperLeg",
     "RightFoot", "RightLowerArm", "RightHand", "RightLowerLeg", "RightUpperArm", "RightUpperLeg"
 }
+
+local highlightedParts = {}
+
+local function addHighlight(part)
+    if not part or not part:IsA("BasePart") then return end
+    if not highlightedParts[part] then
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "CESP_Highlight"
+        highlight.Adornee = part
+        highlight.Parent = part
+        highlightedParts[part] = highlight
+    end
+
+    local highlight = highlightedParts[part]
+    highlight.FillColor = Options.CESPC.Value
+    highlight.FillTransparency = Options.CESPC.Transparency
+    highlight.OutlineColor = Color3.new(0, 0, 0)
+    highlight.OutlineTransparency = 0.5
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+end
+
+local function clearHighlights()
+    for part, highlight in pairs(highlightedParts) do
+        if highlight then
+            highlight:Destroy()
+        end
+    end
+    table.clear(highlightedParts)
+end
 
 local function scanCESP()
     for _, model in ipairs(workspace:GetChildren()) do
@@ -308,16 +335,7 @@ local function scanCESP()
     end
 end
 
-
-local function clearHighlights()
-    for _, highlight in pairs(highlightedParts) do
-        if highlight then
-            highlight:Destroy()
-        end
-    end
-    table.clear(highlightedParts)
-end
-
+-- When toggling CESP on/off
 Options.CESP:OnChanged(function(state)
     clearHighlights()
     if state then
@@ -325,6 +343,7 @@ Options.CESP:OnChanged(function(state)
     end
 end)
 
+-- Update highlight colors when changed
 Options.CESPC:OnChanged(function()
     for _, highlight in pairs(highlightedParts) do
         highlight.FillColor = Options.CESPC.Value
@@ -332,9 +351,10 @@ Options.CESPC:OnChanged(function()
     end
 end)
 
+-- Periodic refresh every 5 seconds while enabled
 task.spawn(function()
     while true do
-        task.wait(5) -- CESP refresh rate
+        task.wait(5)
         if Options.CESP.Value then
             clearHighlights()
             scanCESP()
