@@ -1,4 +1,4 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local Fluent = loadstring(game:HttpGet("https://raw.githubusercontent.com/milo-is-cooked/skibidi/refs/heads/main/fluent%20library"))()
 
 local Window = Fluent:CreateWindow({
     Title = "Aratare " .. Fluent.Version,
