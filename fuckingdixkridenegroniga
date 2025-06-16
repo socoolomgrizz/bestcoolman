@@ -222,31 +222,31 @@ SettingsTab:AddKeybind("KS", {
     end
 })
 SettingsTab:AddSection("Server")
+
 SettingsTab:AddButton({
     Title = "Rejoin",
-    Description = "Rejoin the current server youre in",
+    Description = "Rejoin the current server you're in",
     Callback = function()
         print("Rejoining...")
-local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
 
-local LocalPlayer = Players.LocalPlayer
+        local TeleportService = game:GetService("TeleportService")
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
 
--- Rejoin the same server
-local function rejoin()
-    local placeId = game.PlaceId
-    local jobId = game.JobId
+        -- Rejoin the same server
+        local function rejoin()
+            local placeId = game.PlaceId
+            local jobId = game.JobId
 
-    if jobId ~= "" then
-        TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
-    else
-        TeleportService:Teleport(placeId, LocalPlayer)
-    end
-end
+            if jobId ~= "" then
+                TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
+            else
+                TeleportService:Teleport(placeId, LocalPlayer)
+            end
+        end
 
--- Call the rejoin function
-rejoin()
-
+        -- Call the rejoin function
+        rejoin()
     end
 })
 
