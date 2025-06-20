@@ -180,28 +180,34 @@ SettingsTab:AddKeybind("SM", {
 
 --Misc Tab
 MiscTab:AddSection("Invisibility")
-local Toggle = MiscTab:AddToggle("INV", 
-{
-    Title = "Toggle Invisibility", 
-    Description = "Toggle your visibility to other players",
+local sound -- this will hold the music instance
+
+local Toggle = MiscTab:AddToggle("MUS", {
+    Title = "Toggle music",
+    Description = "Toggle background music (phonk)",
     Default = false,
     Callback = function(state)
-	if state then
-	    print("INV ON")
+        if state then
+            print("MUS on")
+
+            -- Create and configure the sound
+            sound = Instance.new("Sound", game.SoundService)
+            sound.SoundId = "rbxassetid://122863102226559"
+            sound.Volume = 1
+            sound.Looped = true  -- Ensures continuous looping
+            sound:Play()
+        else
+            print("MUS off")
+            -- Stop and clean up the sound
+            if sound then
+                sound:Stop()
+                sound:Destroy()
+                sound = nil
+            end
         end
-    end 
+    end
 })
-local Toggle = MiscTab:AddToggle("RES", 
-{
-    Title = "Toggle Resolver", 
-    Description = "Toggle resolver to see invisible players",
-    Default = false,
-    Callback = function(state)
-	if state then
-	    print("RES ON")
-        end
-    end 
-})
+
 
 SettingsTab:AddSection("Killswitch")
 SettingsTab:AddKeybind("KS", {
