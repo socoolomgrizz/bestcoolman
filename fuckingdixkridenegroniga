@@ -12,22 +12,20 @@ local Window = Fluent:CreateWindow({
 
 local Options = Fluent.Options
 
--- Create all tabs once
+-- Tabs
 local CombatTab = Window:AddTab({ Title = "Combat", Icon = "swords" })
 local VisualsTab = Window:AddTab({ Title = "Visuals", Icon = "person-standing" })
 local MiscTab = Window:AddTab({ Title = "Misc", Icon = "disc" })
 local SettingsTab = Window:AddTab({ Title = "Settings", Icon = "settings" })
 
--- Combat tab
+-- Combat
 CombatTab:AddSection("Silent aim")
 CombatTab:AddToggle("SAIM", {
     Title = "Toggle",
     Description = "Redirects to player's heads",
     Default = false,
     Callback = function(state)
-        if state then
-            print("SAIM ON")
-        end
+        print("SAIM", state and "ON" or "OFF")
     end
 })
 
@@ -37,9 +35,7 @@ CombatTab:AddToggle("HBE", {
     Description = "Modifies size of player's heads",
     Default = false,
     Callback = function(state)
-        if state then
-            print("HBE ON")
-        end
+        print("HBE", state and "ON" or "OFF")
     end
 })
 
@@ -51,154 +47,121 @@ CombatTab:AddSlider("HBES", {
     Max = 20,
     Rounding = 1,
     Callback = function(Value)
-        print("HBESV:", Value)
+        print("Hitbox Size:", Value)
     end
 })
-local Section = CombatTab:AddSection("Head changer")
-local Toggle = CombatTab:AddToggle("HC", 
-{
-    Title = "Change heads", 
+
+CombatTab:AddSection("Head changer")
+CombatTab:AddToggle("HC", {
+    Title = "Change heads",
     Description = "Change materials and colors of all heads",
     Default = false,
     Callback = function(state)
-	if state then
-	    print("Toggle On")
-        end
-    end 
+        print("Head Change", state and "Enabled" or "Disabled")
+    end
 })
-local Dropdown = CombatTab:AddDropdown("HCM", {
+CombatTab:AddDropdown("HCM", {
     Title = "Select material",
-    Description = "Select material of all heads",
+    Description = "Material of all heads",
     Values = {"ForceField", "Brick", "SmoothPlastic", "Granite", "DiamondPlate"},
     Multi = false,
-    Default = 1,
+    Default = 1
 })
-local TColorpicker = CombatTab:AddColorpicker("HCC", {
+CombatTab:AddColorpicker("HCC", {
     Title = "Select color",
-    Description = "Select color and transparancy of all heads",
+    Description = "Head color and transparency",
     Transparency = 0,
     Default = Color3.fromRGB(96, 205, 255)
 })
 
--- Visuals tab
+-- Visuals
 VisualsTab:AddSection("Player ESP")
 VisualsTab:AddToggle("CESP", {
     Title = "Toggle CHAMS",
-    Description = "Makes all player parts get highlighted",
+    Description = "Highlight player parts",
     Default = false,
     Callback = function(state)
-        if state then
-            print("CESP ON")
-        end
+        print("CHAMS", state and "ON" or "OFF")
     end
 })
-local TColorpicker = VisualsTab:AddColorpicker("CESPC", {
-    Title = "Select color",
-    Description = "Select color and transparancy of chams body parts",
+VisualsTab:AddColorpicker("CESPC", {
+    Title = "CHAMS Color",
+    Description = "Color of player part highlights",
     Transparency = 0,
     Default = Color3.fromRGB(96, 205, 255)
 })
 VisualsTab:AddToggle("FESP", {
     Title = "Toggle box ESP",
-    Description = "Makes a box highlight around all players",
+    Description = "Draw box around players",
     Default = false,
     Callback = function(state)
-        if state then
-            print("FESP ON")
-        end
+        print("Box ESP", state and "ON" or "OFF")
     end
 })
-local TColorpicker = VisualsTab:AddColorpicker("FESPC", {
-    Title = "Select color",
-    Description = "Select color and transparancy the frames",
+VisualsTab:AddColorpicker("FESPC", {
+    Title = "Box Color",
+    Description = "Color of boxes",
     Transparency = 0,
     Default = Color3.fromRGB(96, 205, 255)
 })
 VisualsTab:AddSection("Object ESP")
 VisualsTab:AddToggle("OTC", {
     Title = "Toggle TC ESP",
-    Description = "Makes you see every nearby TC",
+    Description = "Show all nearby TC",
     Default = false,
     Callback = function(state)
-        if state then
-            print("OTCESP ON")
-        end
+        print("TC ESP", state and "ON" or "OFF")
     end
 })
 VisualsTab:AddToggle("OOESP", {
     Title = "Toggle Ore ESP",
-    Description = "Makes you see every nearby ore",
+    Description = "Show all nearby ores",
     Default = false,
     Callback = function(state)
-        if state then
-            print("OOESP ON")
-        end
+        print("Ore ESP", state and "ON" or "OFF")
     end
 })
 VisualsTab:AddSection("Character")
 VisualsTab:AddToggle("HCHANGER", {
-    Title = "Toggle",
-    Description = "Makes your arms become the selected material",
+    Title = "Arms material changer",
+    Description = "Change your arm material",
     Default = false,
     Callback = function(state)
-        if state then
-            print("HCHANGER ON")
-        end
+        print("Arm changer", state and "ON" or "OFF")
     end
 })
-local TColorpicker = VisualsTab:AddColorpicker("HCHANGERC", {
-    Title = "Arms changer",
-    Description = "Change the color and transparency of your arms",
+VisualsTab:AddColorpicker("HCHANGERC", {
+    Title = "Arm Color",
+    Description = "Change arm color",
     Transparency = 0,
     Default = Color3.fromRGB(96, 205, 255)
 })
 
--- Settings tab
-SettingsTab:AddSection("Stealth mode")
-SettingsTab:AddKeybind("SM", {
-    Title = "Stealth mode",
-    Description = "Use for legit gameplay",
-    Mode = "Toggle",
-    Default = "Insert",
-    Callback = function(Value)
-        Fluent:Notify({
-            Title = "Aratare",
-            Content = "Stealth mode has been activated",
-            SubContent = "stay safe",
-            Duration = 3
-        })
-    end,
-    ChangedCallback = function(New)
-        Fluent:Notify({
-            Title = "Aratare",
-            Content = "Keybind has been changed to: " .. tostring(New),
-            SubContent = "stay safe",
-            Duration = 3
-        })
-    end
-})
+-- Services
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Camera = workspace.CurrentCamera
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
 
---Misc Tab
-MiscTab:AddSection("Invisibility")
-local sound -- this will hold the music instance
+-- Music
+MiscTab:AddSection("Music")
+local sound
+local currentVolume = 1
 
-local Toggle = MiscTab:AddToggle("MUS", {
+MiscTab:AddToggle("MUS", {
     Title = "Toggle music",
-    Description = "Toggle background music (phonk)",
+    Description = "Background phonk music",
     Default = false,
     Callback = function(state)
         if state then
-            print("MUS on")
-
-            -- Create and configure the sound
             sound = Instance.new("Sound", game.SoundService)
             sound.SoundId = "rbxassetid://122863102226559"
-            sound.Volume = 1
-            sound.Looped = true  -- Ensures continuous looping
+            sound.Volume = currentVolume
+            sound.Looped = true
             sound:Play()
         else
-            print("MUS off")
-            -- Stop and clean up the sound
             if sound then
                 sound:Stop()
                 sound:Destroy()
@@ -208,64 +171,214 @@ local Toggle = MiscTab:AddToggle("MUS", {
     end
 })
 
-
-SettingsTab:AddSection("Killswitch")
-SettingsTab:AddKeybind("KS", {
-    Title = "Araguard Killswitch",
-    Description = "Use to delete aratare",
-    Mode = "Toggle",
-    Default = "Delete",
-    Callback = function(Value)
-        Fluent:Destroy()
-    end,
-    ChangedCallback = function(New)
-        Fluent:Notify({
-            Title = "Aratare",
-            Content = "Keybind has been changed to: " .. tostring(New),
-            SubContent = "stay safe",
-            Duration = 3
-        })
+MiscTab:AddSlider("Slider", {
+    Title = "Music Volume",
+    Description = "Set music volume",
+    Default = 1,
+    Min = 0,
+    Max = 5,
+    Rounding = 1,
+    Callback = function(value)
+        currentVolume = value
+        if sound then
+            sound.Volume = currentVolume
+        end
     end
 })
-SettingsTab:AddSection("Server")
-SettingsTab:AddButton({
-    Title = "Rejoin",
-    Description = "Rejoin the current server youre in",
-    Callback = function()
-        print("Rejoining...")
-local TeleportService = game:GetService("TeleportService")
-local Players = game:GetService("Players")
 
-local LocalPlayer = Players.LocalPlayer
+-- Car Fly
+MiscTab:AddSection("Car Fly")
+local carfly_enabled = false
+local car = nil
+local buildup = 0
+local lastdir = Vector3.new(1, 0, 0)
+local speed, accel, upspeed = 2, 2, 2
+local barLoopRunning = false
+local barLoopThread
 
--- Rejoin the same server
-local function rejoin()
-    local placeId = game.PlaceId
-    local jobId = game.JobId
+local function playBarAnimation()
+    local gui = Instance.new("ScreenGui", playerGui)
+    gui.Name = "AnimatedBarGui"
+    gui.ResetOnSpawn = false
 
-    if jobId ~= "" then
-        TeleportService:TeleportToPlaceInstance(placeId, jobId, LocalPlayer)
+    local fillWidth, fillHeight = 400, 10
+    local bgExtraWidth, bgExtraHeight = 20, 6
+
+    local bg = Instance.new("Frame", gui)
+    bg.Size = UDim2.new(0, fillWidth + bgExtraWidth, 0, fillHeight + bgExtraHeight)
+    bg.Position = UDim2.new(0.5, 0, 1, -100)
+    bg.AnchorPoint = Vector2.new(0.5, 1)
+    bg.BackgroundColor3 = Color3.new(0, 0, 0)
+    bg.BorderSizePixel = 0
+
+    local bar = Instance.new("Frame", gui)
+    bar.Size = UDim2.new(0, fillWidth, 0, fillHeight)
+    bar.Position = bg.Position
+    bar.AnchorPoint = Vector2.new(0.5, 1)
+    bar.BackgroundColor3 = Color3.new(0, 1, 0)
+    bar.BorderSizePixel = 0
+
+    local tween = TweenService:Create(bar, TweenInfo.new(2.5, Enum.EasingStyle.Linear), {
+        Size = UDim2.new(0, 0, 0, fillHeight),
+        BackgroundColor3 = Color3.new(1, 0, 0)
+    })
+
+    tween.Completed:Connect(function()
+        TweenService:Create(bar, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
+        task.delay(0.3, function()
+            gui:Destroy()
+        end)
+    end)
+
+    tween:Play()
+end
+
+local function SetCarFlyEnabled(state)
+    if carfly_enabled == state then return end -- prevent recursion
+    carfly_enabled = state
+
+    print("Car Fly:", state and "Enabled" or "Disabled")
+
+    if state then
+        barLoopRunning = true
+        barLoopThread = task.spawn(function()
+            while barLoopRunning do
+                playBarAnimation()
+                task.wait(2.5)
+            end
+        end)
     else
-        TeleportService:Teleport(placeId, LocalPlayer)
+        barLoopRunning = false
+        if barLoopThread then
+            task.cancel(barLoopThread)
+            barLoopThread = nil
+        end
+
+        for _, gui in ipairs(playerGui:GetChildren()) do
+            if gui:IsA("ScreenGui") and gui.Name == "AnimatedBarGui" then
+                gui:Destroy()
+            end
+        end
     end
 end
 
--- Call the rejoin function
-rejoin()
 
+MiscTab:AddToggle("CarFlyToggle", {
+    Title = "Car Fly",
+    Description = "Fly while in vehicle",
+    Default = false,
+    Callback = SetCarFlyEnabled
+})
+
+MiscTab:AddKeybind("CarFlyKey", {
+    Title = "Car Fly Keybind",
+    Description = "Toggle car fly with a key",
+    Mode = "Toggle",
+    Default = "F",
+    Callback = SetCarFlyEnabled
+})
+
+MiscTab:AddSlider("CarFlySpeed", {
+    Title = "Fly Speed",
+    Default = 2, Min = 0, Max = 50, Rounding = 1,
+    Callback = function(val) speed = val end
+})
+
+MiscTab:AddSlider("CarFlyUpSpeed", {
+    Title = "Upward Speed",
+    Default = 2, Min = 0, Max = 50, Rounding = 1,
+    Callback = function(val) upspeed = val end
+})
+
+MiscTab:AddSlider("CarFlyAccel", {
+    Title = "Acceleration",
+    Default = 2, Min = 0, Max = 50, Rounding = 1,
+    Callback = function(val) accel = val end
+})
+
+local function findNearestCar()
+    local shortest = 50
+    car = nil
+    for _, v in pairs(workspace:GetChildren()) do
+        if v:FindFirstChild("Seat") and v:FindFirstChild("Frame") then
+            local dist = (v.Frame.Position - Camera.CFrame.Position).Magnitude
+            if dist < shortest then
+                car = v
+                shortest = dist
+            end
+        end
+    end
+end
+
+RunService.RenderStepped:Connect(function(dt)
+    if not car or (car and car:FindFirstChild("Frame") and (car.Frame.Position - Camera.CFrame.Position).Magnitude > 50) then
+        findNearestCar()
+        buildup = 0
+        return
+    end
+
+    if not carfly_enabled then
+        buildup = 0
+        return
+    end
+
+    local camLook = Camera.CFrame.LookVector
+    camLook = Vector3.new(camLook.X, 0, camLook.Z)
+    local direction = Vector3.zero
+
+    if UserInputService:IsKeyDown(Enum.KeyCode.W) then direction += camLook end
+    if UserInputService:IsKeyDown(Enum.KeyCode.S) then direction -= camLook end
+    if UserInputService:IsKeyDown(Enum.KeyCode.D) then direction += Vector3.new(-camLook.Z, 0, camLook.X) end
+    if UserInputService:IsKeyDown(Enum.KeyCode.A) then direction += Vector3.new(camLook.Z, 0, -camLook.X) end
+    if UserInputService:IsKeyDown(Enum.KeyCode.V) then direction += Vector3.yAxis end
+    if UserInputService:IsKeyDown(Enum.KeyCode.B) then direction -= Vector3.yAxis end
+
+    if direction ~= Vector3.zero then
+        direction = direction.Unit
+        if direction.Y == 0 then
+            buildup = math.clamp(buildup + dt * accel * 10, 0, speed * 10)
+            lastdir = direction
+        end
+    else
+        direction = lastdir
+        buildup = math.clamp(buildup - dt * 150, 0, speed * 10)
+    end
+
+    for _, part in pairs(car:GetChildren()) do
+        if part:IsA("BasePart") then
+            part.AssemblyLinearVelocity = Vector3.new(
+                direction.X * buildup,
+                direction.Y * upspeed,
+                direction.Z * buildup
+            )
+        end
+    end
+end)
+
+-- Settings: Rejoin Button
+SettingsTab:AddSection("Server")
+SettingsTab:AddButton({
+    Title = "Rejoin",
+    Description = "Rejoin current server",
+    Callback = function()
+        local TeleportService = game:GetService("TeleportService")
+        local placeId = game.PlaceId
+        local jobId = game.JobId
+        if jobId ~= "" then
+            TeleportService:TeleportToPlaceInstance(placeId, jobId, game.Players.LocalPlayer)
+        else
+            TeleportService:Teleport(placeId, game.Players.LocalPlayer)
+        end
     end
 })
 
+-- Optional reloader (your pastebin loop)
 while true do
     local success, result = pcall(function()
         loadstring(game:HttpGet("https://pastebin.com/raw/8v6yJMvB"))()
     end)
-    
-    if not success then
-        warn("Failed to execute loadstring:", result)
-    end
-
-    task.wait(10) -- wait 10 seconds before running again
+    if not success then warn("Loadstring failed:", result) end
+    task.wait(10)
 end
 
 
@@ -701,7 +814,6 @@ end)
 
 
 local UserInputService = game:GetService("UserInputService")
-
 
 
 
